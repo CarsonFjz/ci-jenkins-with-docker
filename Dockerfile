@@ -1,12 +1,8 @@
 FROM jenkins/jenkins:lts
 
 ARG docker_compose_version=1.23.1
-ARG go_version=1.11.5
-ARG node_version=11
 
 ENV DOCKER_COMPOSE_VERSION ${docker_compose_version}
-ENV GO_VERSION ${go_version}
-ENV NODE_VERSION ${node_version}
 
 USER root
 
@@ -34,13 +30,9 @@ RUN apt-get update && apt-get -y install \
                 "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
                 $(lsb_release -cs) \
                 stable" && \
-        # fetch nodejs install script
-        curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x -o nodesource_setup.sh && \
-        bash nodesource_setup.sh && \
-        rm nodesource_setup.sh && \
-        # install docker && nodejs
+
+        # install docker
         apt-get -y install \
-                nodejs \
                 docker-ce && \
         # install docker-compose
         curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
@@ -52,20 +44,8 @@ RUN apt-get update && apt-get -y install \
 
 WORKDIR /root
 
-# setup go
-RUN curl -O https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz \
-        && tar -xvf go${GO_VERSION}.linux-amd64.tar.gz \
-        && mv go /usr/local/go \
-        && chown -R jenkins /usr/local/go \
-        && mkdir -p /home/jenkins/go/ \
-        && chown -R jenkins /home/jenkins/go/ \
-        && echo $'\nexport GOROOT="/usr/local/go"\nexport GOPATH="/home/jenkins/go"\nexport PATH=$GOROOT/bin:$GOPATH/bin:$PATH\n' >> /root/.bashrc \
-        && rm -rf go${GO_VERSION}.linux-amd64.tar.gz gocache tmp
-
 USER jenkins
 
-ENV GOROOT="/usr/local/go"
-ENV GOPATH="/home/jenkins/go"
 ENV PATH="${GOROOT}/bin:${GOPATH}/bin:${PATH}"
 
 WORKDIR ${JENKINS_HOME}
