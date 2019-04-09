@@ -24,12 +24,6 @@ RUN apt-get update && apt-get -y install \
                 cd /root/.ssh && \
                 ssh-keygen -t rsa -N "" -f id_rsa && \
                 cd - && \
-        # add docker to apt repository
-        curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
-                add-apt-repository \
-                "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
-                $(lsb_release -cs) \
-                stable" && \
 
         # install docker
         apt-get -y install \
