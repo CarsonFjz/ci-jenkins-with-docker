@@ -1,16 +1,16 @@
-## Setup your host
+## 设置项目基本信息
 
 ```bash
-# setup your project name
+# 项目名称
 $ export PROJECT_NAME="dummy"
-# setup the desired path to jenkins_home
-$ export JENKINS_HOME=/path/to/desired/jenkins_home
+# 项目根目录
+$ export JENKINS_HOME=/jenkins_home
 $ sudo mkdir -p $JENKINS_HOME/{workspace,builds,jobs}
 $ sudo chown -R 1000 $JENKINS_HOME
 $ sudo chmod -R a+rwx $JENKINS_HOME
 ```
 
-## Setup your project
+## 准备构建
 
 ```bash
 $ git clone https://github.com/CarsonFjz/ci-jenkins-with-docker.git
@@ -18,13 +18,13 @@ $ mv ci-jenkins-with-docker $PROJECT_NAME
 $ cd $PROJECT_NAME
 ```
 
-## Run the container
+## 构建容器
 
 ```bash
 $ docker-compose up --build --detach
 ```
 
-## Complete the installation
+## 完成构建
 
 - Connect to the running container as root:
 
@@ -42,7 +42,7 @@ $ chown jenkins /var/run/docker.sock
 $ exit
 ```
 
-- Test docker:
+- 测试 docker:
 
 ```bash
 $ docker exec -ti "${PROJECT_NAME}_jenkins" bash
@@ -51,7 +51,7 @@ $ docker exec -ti "${PROJECT_NAME}_jenkins" bash
 $ docker ps -a
 ```
 
-## Retrieve your ssh keys generated for your jenkins
+## jenkins生成的ssh密钥
 
 ```bash
 $ docker exec -ti -u root "${PROJECT_NAME}_jenkins" bash
@@ -59,13 +59,13 @@ $ cat /root/.ssh/*
 $ exit
 ```
 
-## Logs
+## 日志查看
 
 ```bash
 $ docker logs -f `docker ps -aqf "name=${PROJECT_NAME}_jenkins"`
 ```
 
-# Uninstall
+# 卸载
 
 ```bash
 $ docker stop "${PROJECT_NAME}_jenkins"
