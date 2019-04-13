@@ -19,6 +19,7 @@ RUN apt-get update && apt-get -y install \
                 build-essential \
                 libssl-dev \
                 software-properties-common && \
+                
         # generate jenkins specific ssh key
         mkdir /root/.ssh && \
                 cd /root/.ssh && \
@@ -28,11 +29,11 @@ RUN apt-get update && apt-get -y install \
         # install docker
         apt-get -y install \
                 docker-ce && \
+                usermod -aG docker jenkins \
+                
         # install docker-compose
-        curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
-                && chmod +x /usr/local/bin/docker-compose && \
-        # give jenkins docker rights
-        usermod -aG docker jenkins && \
+        curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose \
+        chmod +x /usr/local/bin/docker-compose \
         # grant correct permissions to npm -g
         chown -R jenkins /usr/lib
 
