@@ -1,16 +1,3 @@
-# ci-jenkins-with-docker
-
-A Jenkins base image with docker-in-docker enabled and docker-compose, go and nodejs embedded.
-
-**NOTE:**  You can edit the `docker-compose.yml` file to install docker-compose, go and nodejs version that fit to your needs.
-
-# Install
-
-The only requirement is:
-
-- [Docker](https://docs.docker.com/)
-
-
 ## Setup your host
 
 ```bash
@@ -26,7 +13,7 @@ $ sudo chmod -R a+rwx $JENKINS_HOME
 ## Setup your project
 
 ```bash
-$ git clone https://github.com/TommyStarK/ci-jenkins-with-docker.git
+$ git clone https://github.com/CarsonFjz/ci-jenkins-with-docker.git
 $ mv ci-jenkins-with-docker $PROJECT_NAME
 $ cd $PROJECT_NAME
 ```
@@ -45,7 +32,7 @@ $ docker-compose up --build --detach
 $ docker exec -ti -u root "${PROJECT_NAME}_jenkins" bash
 ```
 
-- Now we are inside the container, run the following commands:
+- 这里这么做是因为docker容器启动后才会有docker.sock产生,不能提前给它授权,所以要事后给他权限
 
 ```bash
 # change ownership of docker socket to jenkins user
